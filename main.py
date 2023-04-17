@@ -80,14 +80,13 @@ logging.info(f"Get pppoe client {pppoe_id} on interface {PPPOE_INTERFACE}.")
 
 retry = 0
 while True:
+    time.sleep(CHECK_INTERVAL)
     if retry >= MAX_RETRY:
         logging.error(f"Max retry exceed. Reboot or remove this program.")
-        time.sleep(CHECK_INTERVAL)
         continue
     address = h.get_address(PPPOE_INTERFACE)
     if address is None:
         logging.error(f"Cannot get address. Retry after {CHECK_INTERVAL} seconds.")
-        time.sleep(CHECK_INTERVAL)
         continue
     if address != current_address:
         current_address = address
@@ -99,4 +98,3 @@ while True:
     logging.warning(f"Reconnect and check again after {CHECK_INTERVAL} seconds.")
     h.reconnect_pppoe(pppoe_id)
     retry += 1
-    time.sleep(CHECK_INTERVAL)
